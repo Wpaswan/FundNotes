@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.6.2" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.5.1" />
+    <PackageReference Include="Bolt.MessageQueue" Version="1.0.1" />
+    <PackageReference Include="Grumpy.MessageQueue" Version="2.0.1" />
+    <PackageReference Include="IKVM" Version="8.1.5717" />
+    <PackageReference Include="MessagePack" Version="2.3.85" />
+  </ItemGroup>
+
+</Project>
