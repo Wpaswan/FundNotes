@@ -33,7 +33,7 @@ namespace RepositoryLayer.Class
                 user.phoneNo = userPostModel.phoneNo;
                 user.address = userPostModel.address;
                 user.email = userPostModel.email;
-                user.password = userPostModel.password;
+                user.password =  StringCipher.Encrypt(userPostModel.password);
                 user.CPassword = userPostModel.CPassword;
                 user.registeredDate = DateTime.Now;
                 dbContext.Users.Add(user);
