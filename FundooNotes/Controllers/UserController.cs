@@ -33,8 +33,21 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
+        [HttpPost("login")]
+        public ActionResult LogInUser(UserLogin userLogIn)
+        {
+            try
+            {
+                string result = this.userBL.LogInUser(userLogIn);
+                return this.Ok(new { success = true, message = $"LogIn Successful {userLogIn.email}, data = {result}" });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
-     
+
     }
     
     
