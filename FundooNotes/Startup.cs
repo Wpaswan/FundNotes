@@ -36,7 +36,7 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FundooDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooProject"]));
+            services.AddDbContext<FundooDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooNotes"]));
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddTransient<IUserBL, UserBL>();

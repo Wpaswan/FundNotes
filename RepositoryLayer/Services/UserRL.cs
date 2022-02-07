@@ -120,7 +120,19 @@ namespace RepositoryLayer.Class
                 throw e;
             }
         }
+        public List<User> GetAllUsers()
+        {
+            try
+            {
+                var result = dbContext.Users.ToList();
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
-       
+
     }
 }
