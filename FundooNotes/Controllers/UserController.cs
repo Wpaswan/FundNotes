@@ -65,6 +65,28 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
+        [HttpPut("forgettpassword")]
+        public ActionResult ForgetPassword(string email)
+        {
+
+            try
+            {
+                this.userBL.ForgetPassword(email);
+
+                return Ok(new { message = "Token sent succesfully.Please check your email for password reset" });
+
+
+
+
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
 
 
     }
