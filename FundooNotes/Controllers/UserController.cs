@@ -34,60 +34,7 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public ActionResult LogInUser(UserLogin userLogIn)
-        {
-            try
-            {
-                string result = this.userBL.LogInUser(userLogIn);
-                return this.Ok(new { success = true, message = $"LogIn Successful {userLogIn.email}, data = {result}" });
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        //[Authorize]
-        [HttpPut("resetpassword")]
-        public ActionResult ResetPassword(string email, string password, string cPassword)
-        {
-            try
-            {
-                if (password != cPassword)
-                {
-                    return BadRequest(new { success = false, message = $"Paswords are not equal" });
-                }
-                // var identity = User.Identity as ClaimsIdentity 
-                this.userBL.ResetPassword(email, password, cPassword);
-                return this.Ok(new { success = true, message = $"Password changed Successfully {email}" });
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        [HttpPut("forgettpassword")]
-        public ActionResult ForgetPassword(string email)
-        {
-
-            try
-            {
-                this.userBL.ForgetPassword(email);
-
-                return Ok(new { message = "Token sent succesfully.Please check your email for password reset" });
-
-
-
-
-
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
+     
     }
     
     
