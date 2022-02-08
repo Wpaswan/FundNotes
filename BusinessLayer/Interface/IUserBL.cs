@@ -10,7 +10,7 @@ namespace BusinessLayer.Interface
         void RegisterUser(UserPostModal userPostModel);
         string LogInUser(UserLogin userLogIn);
         void ResetPassword(string email, string password, string cPassword);
-        void ForgetPassword(string email);
+        string ForgetPassword(string email);
         List<User> GetAllUsers();
     }
 }

@@ -50,9 +50,10 @@ namespace RepositoryLayer.Class
             try
             {
                 User user = new User();
-                var result = dbContext.Users.Where(x => x.email == userLogIn.email && x.password == userLogIn.password).FirstOrDefault();
+                string encryptPassword= StringCipher.Encrypt(userLogIn.password);
+                var result = dbContext.Users.Where(x => x.email == userLogIn.email && x.password == encryptPassword).FirstOrDefault();
                 if (result != null)
-                    return GenerateJWTToken(userLogIn.email, user.userId);
+                    return GenerateJWTToken(userLogIn.email);
                 else
                     return null;
             }
@@ -61,7 +62,7 @@ namespace RepositoryLayer.Class
                 throw e;
             }
         }
-        private  string GenerateJWTToken(string email, int userId)
+        private  string GenerateJWTToken(string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
@@ -70,7 +71,7 @@ namespace RepositoryLayer.Class
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("email", email),
-                    new Claim("userId", userId.ToString())
+                    //new Claim("userId", userId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials =
@@ -81,27 +82,32 @@ namespace RepositoryLayer.Class
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        public void ForgetPassword(string email)
+        public string ForgetPassword(string email)
         {
             try
             {
-                User user = new User();
-                var result = dbContext.Users.Where(x => x.email == email).FirstOrDefault();
-                //if (result != null)
-                //{
-                //    //var token = GenerateJWTToken(email);
-                //    return true;
-                //}
-                //else
-                //    return false;
+                var checkemail = dbContext.Users.FirstOrDefault(e => e.email == email);
+                //var checkemail = dbContex.Users.FirstOrDefault(e => e.Email == email);
+                if (checkemail!=null)
+                {
+                    var token = GenerateJWTToken(email);
+
+
+                    new EmailServices().MSMQSender(token);
+                    return token;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 throw e;
             }
+
         }
 
-      
         public void ResetPassword(string email, string password, string cPassword)
         {
             try

@@ -46,7 +46,7 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpPut("resetpassword")]
         public ActionResult ResetPassword(string email, string password, string cPassword)
         {
