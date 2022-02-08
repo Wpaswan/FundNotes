@@ -13,12 +13,12 @@ namespace RepositoryLayer.Migrations
                 {
                     userId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    fName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    lName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    fName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    lName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     phoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    email = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     registeredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -32,8 +32,7 @@ namespace RepositoryLayer.Migrations
                 name: "IX_Users_email",
                 table: "Users",
                 column: "email",
-                unique: true,
-                filter: "[email] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
