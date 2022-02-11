@@ -8,6 +8,7 @@ using System.Text;
 namespace BusinessLayer.Class
 {
 
+
     public class UserBL : IUserBL
     {
         IUserRL userRL;
@@ -50,7 +51,7 @@ namespace BusinessLayer.Class
             }
         }
 
-        public string ForgetPassword(string email)
+        public bool ForgetPassword(string email)
         {
             try
             {

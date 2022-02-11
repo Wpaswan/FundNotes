@@ -11,56 +11,20 @@ namespace RepositoryLayer.Services
 {
     public class EmailServices
     {
-        MessageQueue messageQueue = new MessageQueue();
-
-
-        public void MSMQSender(string token)
+        public static void SendEmail(string email, string token)
         {
-            messageQueue.Path = @".\private$\Token";//for windows path
-            if (!MessageQueue.Exists(messageQueue.Path))
+            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
             {
-                MessageQueue.Create(messageQueue.Path);
-            }
-            messageQueue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });//for asyn communication
-            messageQueue.ReceiveCompleted += MessageQueue_ReceiveCompleted;//press tab 
-            messageQueue.Send(token);
-            messageQueue.BeginReceive();
-            messageQueue.Close();
-        }
-
-        public void MessageQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
-        {
-            var message = messageQueue.EndReceive(e.AsyncResult);
-            string token = message.Body.ToString();
-            string Subject = "FundoNotes Claim token";
-            string Body = token;
-            string jwt = DecodeJwt(token);
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential("Dablu@gmail.com", "W123"),//give dummy gmail
-                EnableSsl = true,
-
-            };
-
-            smtpClient.Send("Dablu@gmail.com", jwt, Subject, Body);
-            messageQueue.BeginReceive();
-
-        }
-        public string DecodeJwt(string token)
-        {
-            try
-            {
-                var decodeToken = token;
-                var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadJwtToken((decodeToken));
-                var result = jsonToken.Claims.FirstOrDefault().Value;
-                return result;
-            }
-            catch (Exception)
-            {
-
-                throw;
+                client.EnableSsl = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = true;
+                client.Credentials = new NetworkCredential("dablup130@gmail.com", "WPaswan12@");
+                MailMessage msgObj = new MailMessage();
+                msgObj.To.Add(email);
+                msgObj.From = new MailAddress("dablup130@gmail.com");
+                msgObj.Subject = "Password Reset Link";
+                msgObj.Body = $"www.FundooNotes.com/reset-password/{token}";
+                client.Send(msgObj);
             }
         }
     }

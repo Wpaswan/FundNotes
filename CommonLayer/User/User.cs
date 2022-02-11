@@ -18,7 +18,6 @@ namespace CommonLayer.User
         public string lName { get; set; }
         public string phoneNo { get; set; }
         public string address { get; set; }
-
         [Required]
         public string email { get; set; }
         [Required]
