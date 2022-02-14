@@ -29,6 +29,36 @@ namespace BusinessLayer.Services
                 }
             }
 
+        public bool DeleteNote(int notesID)
+        {
+
+            try
+            {
+                if (noteRL.DeleteNote(notesID))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public IEnumerable<Note> GetAllNotes()
+        {
+            try
+            {
+                return noteRL.GetAllNotes();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public bool UpdateNotes(int noteID, NotePostModel notesModel)
         {
             try

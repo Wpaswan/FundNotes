@@ -10,5 +10,7 @@ namespace BusinessLayer.Interface
     {
         Task CreateNotes(int userId, NotePostModel notePost);
         public bool UpdateNotes(int noteID, NotePostModel notesModel);
+        public IEnumerable<Note> GetAllNotes();
+        public bool DeleteNote(int notesID);
     }
 }

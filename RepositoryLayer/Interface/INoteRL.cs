@@ -10,5 +10,7 @@ namespace RepositoryLayer.Interface
     {
         Task CreateNotes(int userId, NotePostModel notePost);
         public bool UpdateNotes(int noteID, NotePostModel notesPost);
+        public IEnumerable<Note> GetAllNotes();
+        public bool DeleteNote(int notesID);
     }
 }

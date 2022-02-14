@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,6 +60,43 @@ namespace FundooNotes.Controllers
                 {
                     return this.BadRequest(new { Success = false, message = "Note with given ID not found" });
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpGet("getallnotes")]
+        public IEnumerable<Note> GetAllNotes()
+        {
+            try
+            {
+                return NoteBL.GetAllNotes();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpDelete]
+        public IActionResult DeleteNote(int noteID)
+        {
+            try
+            {
+                if (NoteBL.DeleteNote(noteID))
+                {
+                    return this.Ok(new { Success = true, message = "Notes deleted successfully" });
+
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Notes with given ID not found" });
+                }
+
             }
             catch (Exception)
             {

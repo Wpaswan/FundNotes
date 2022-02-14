@@ -59,5 +59,24 @@ namespace RepositoryLayer.Services
                 return false;
 
         }
+        public IEnumerable<Note> GetAllNotes()
+        {
+            return dbContext.Note.ToList();
+        }
+
+        public bool DeleteNote(int notesID)
+        {
+            Note notes = dbContext.Note.Where(e => e.NotesId == notesID).FirstOrDefault();
+            if (notes != null)
+            {
+                dbContext.Note.Remove(notes);
+                dbContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
