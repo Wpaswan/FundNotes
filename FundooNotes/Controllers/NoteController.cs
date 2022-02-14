@@ -169,6 +169,28 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
+        [Authorize]
+        [HttpPut("{noteID}/{IsPin}")]
+
+        public async Task<IActionResult> IsPin(int noteID)
+        {
+            try
+            {
+                await NoteBL.IsPin(noteID);
+
+
+                return this.Ok(new { Success = true, message = $"NoteTrash successfull for {noteID}" });
+
+
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
 
     }
 }

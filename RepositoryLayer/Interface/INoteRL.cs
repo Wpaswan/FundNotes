@@ -15,6 +15,7 @@ namespace RepositoryLayer.Interface
         Task<List<Note>> changeColor(int noteID, string color);
         Task ArchieveNote(int noteId);
         Task TrashNote(int noteId);
+        Task IsPin(int noteId);
 
     }
 }

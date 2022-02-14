@@ -123,5 +123,20 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+
+        public async Task IsPin(int noteId)
+        {
+            try
+            {
+                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                note.IsPin=true;
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

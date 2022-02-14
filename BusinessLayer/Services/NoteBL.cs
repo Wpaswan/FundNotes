@@ -108,5 +108,17 @@ namespace BusinessLayer.Services
                 throw e;
             }
         }
+        public async Task IsPin(int noteId)
+        {
+            try
+            {
+                await noteRL.TrashNote(noteId);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
     }
     }
