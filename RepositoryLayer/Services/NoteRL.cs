@@ -63,7 +63,7 @@ namespace RepositoryLayer.Services
         {
             return dbContext.Note.ToList();
         }
-
+        //Below is function of DeleteNote
         public bool DeleteNote(int notesID)
         {
             Note notes = dbContext.Note.Where(e => e.NotesId == notesID).FirstOrDefault();
