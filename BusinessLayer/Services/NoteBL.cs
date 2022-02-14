@@ -74,5 +74,39 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+        public async Task<List<Note>> changeColor(int noteID, string color)
+        {
+            try
+            {
+                return await noteRL.changeColor(noteID, color);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task ArchieveNote(int noteId)
+        {
+            try
+            {
+                await noteRL.ArchieveNote(noteId);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public async Task TrashNote(int noteId)
+        {
+            try
+            {
+                await noteRL.TrashNote(noteId);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
     }

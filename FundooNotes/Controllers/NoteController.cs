@@ -127,6 +127,48 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
+        [Authorize]
+        [HttpPut("{noteID}/{Isarchieve}")]
+        public async Task<IActionResult> IsArchieve(int noteID)
+        {
+            try
+            {
+                await NoteBL.ArchieveNote(noteID);
+
+
+                return this.Ok(new { Success = true, message = $"NoteArchieve successfull for {noteID}" });
+
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpPut("{noteID}/{IsTrash}")]
+        public async Task<IActionResult> IsTrash(int noteID)
+        {
+            try
+            {
+                await NoteBL.TrashNote(noteID);
+
+
+                return this.Ok(new { Success = true, message = $"NoteTrash successfull for {noteID}" });
+
+
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
 
     }
 }

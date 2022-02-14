@@ -95,5 +95,33 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+        public async Task ArchieveNote(int noteId)
+        {
+            try
+            {
+                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                note.IsArchive=true;
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        public async Task TrashNote(int noteId)
+        {
+            try
+            {
+                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                note.IsTrash=true;
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
