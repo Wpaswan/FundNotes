@@ -104,6 +104,29 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
+        [Authorize]
+        [HttpPut("{noteID}/{color}")]
+        public async Task<IActionResult> changeColor(int noteID, string color)
+        {
+            try
+            {
+                List<Note> note = await NoteBL.changeColor(noteID, color);
+                if (note!=null)
+                {
+                    return this.Ok(new { Success = true, message = "Color changed successfully", data = note });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Notes with given ID not found" });
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

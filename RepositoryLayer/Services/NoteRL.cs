@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Note;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Interface;
 using System;
@@ -76,6 +77,22 @@ namespace RepositoryLayer.Services
             else
             {
                 return false;
+            }
+        }
+
+        public async Task<List<Note>> changeColor(int noteID, string color)
+        {
+            try
+            {
+                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteID);
+                note.color=color;
+                await dbContext.SaveChangesAsync();
+                return await dbContext.Note.ToListAsync();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }

@@ -12,5 +12,7 @@ namespace RepositoryLayer.Interface
         public bool UpdateNotes(int noteID, NotePostModel notesPost);
         public IEnumerable<Note> GetAllNotes();
         public bool DeleteNote(int notesID);
+        Task<List<Note>> changeColor(int noteID, string color);
+
     }
 }
