@@ -29,5 +29,20 @@ namespace BusinessLayer.Services
                 }
             }
 
+        public bool UpdateNotes(int noteID, NotePostModel notesModel)
+        {
+            try
+            {
+                if (noteRL.UpdateNotes(noteID, notesModel))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
+    }
     }

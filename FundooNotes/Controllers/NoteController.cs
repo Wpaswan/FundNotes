@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using BusinessLayer.Services;
 using CommonLayer.Note;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,28 @@ namespace FundooNotes.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("updatenote")]
+
+        public IActionResult UpdateNotes(int noteID, NotePostModel notesModel)
+        {
+            try
+            {
+                if (NoteBL.UpdateNotes(noteID, notesModel))
+                {
+                    return this.Ok(new { Success = true, message = "Notes updated successfully", response = notesModel, noteID });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Note with given ID not found" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 

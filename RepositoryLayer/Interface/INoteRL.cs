@@ -9,5 +9,6 @@ namespace RepositoryLayer.Interface
     public interface INoteRL
     {
         Task CreateNotes(int userId, NotePostModel notePost);
+        public bool UpdateNotes(int noteID, NotePostModel notesPost);
     }
 }

@@ -45,5 +45,19 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+
+        public bool UpdateNotes(int noteID, NotePostModel notesPost)
+        {
+            Note notes = dbContext.Note.Where(e => e.NotesId==noteID).FirstOrDefault();
+            notes.Title = notesPost.Title;
+            notes.Description=notesPost.Description;
+            dbContext.Note.Update(notes);
+            var result = dbContext.SaveChangesAsync();
+            if (result!=null)
+                return true;
+            else
+                return false;
+
+        }
     }
 }
