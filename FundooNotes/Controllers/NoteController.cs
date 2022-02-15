@@ -12,16 +12,17 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
-    [ApiController]
-    [Route("Note")]
+    //[ApiController]
+    //[Route("[Note]")]
+    [Route("Note/[Controller]")]
     public class NoteController : Controller
     {
         FundooDBContext fundooDBContext;
-        INoteRL NoteBL;
+        INoteBL NoteBL;
 
         public NoteController(INoteBL NoteBL, FundooDBContext fundooDB)
         {
-            this.NoteBL = (INoteRL)NoteBL;
+            this.NoteBL = NoteBL;
             this.fundooDBContext = fundooDB;
         }
 
@@ -46,7 +47,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("updatenote")]
+        [HttpPut("{noteID}/updatenote")]
 
         public IActionResult UpdateNotes(int noteID, NotePostModel notesModel)
         {

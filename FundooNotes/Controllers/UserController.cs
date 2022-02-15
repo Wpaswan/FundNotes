@@ -38,7 +38,7 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
-
+        [Authorize]
         [HttpPost("login")]
         public ActionResult LogInUser(UserLogin userLogIn)
         {
@@ -55,7 +55,7 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
-        [AllowAnonymous]
+        [Authorize]
         [HttpPut("resetpassword")]
         public ActionResult ResetPassword(string password, string cPassword)
         {
