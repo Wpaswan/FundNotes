@@ -1,29 +1,34 @@
 ﻿using BusinessLayer.Interface;
-using BusinessLayer.Services;
 using CommonLayer.Note;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer.Interface;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
-    //[ApiController]
-    //[Route("[Note]")]
-    [Route("Note/[Controller]")]
-    public class NoteController : Controller
+    [ApiController]
+    [Route("Note")]
+    public class NoteController : ControllerBase
     {
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
         FundooDBContext fundooDBContext;
         INoteBL NoteBL;
 
-        public NoteController(INoteBL NoteBL, FundooDBContext fundooDB)
+        public NoteController(INoteBL NoteBL, FundooDBContext fundooDB, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.NoteBL = NoteBL;
             this.fundooDBContext = fundooDB;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
         [Authorize]
@@ -32,8 +37,8 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var Userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
-                int userid = Int32.Parse(Userid.Value);
+
+                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
 
                 await this.NoteBL.CreateNotes(userid, notePostModel);
 
@@ -47,7 +52,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("{noteID}/updatenote")]
+        [HttpPut("UpdateNotes/{noteID}")]
 
         public IActionResult UpdateNotes(int noteID, NotePostModel notesModel)
         {
@@ -68,13 +73,29 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpGet("getallnotes")]
-        public IEnumerable<Note> GetAllNotes()
+        // [Authorize]
+        [HttpGet("getAllNoteusingRedis")]
+        public async Task<IActionResult> GetAllNotes()
         {
             try
             {
-                return NoteBL.GetAllNotes();
+                var cacheKey = "NoteList";
+                string serializedNoteList;
+                var noteList = new List<Note>();
+                var redisnoteList = await distributedCache.GetAsync(cacheKey);
+                if (redisnoteList != null)
+                {
+                    serializedNoteList = Encoding.UTF8.GetString(redisnoteList);
+                    noteList = JsonConvert.DeserializeObject<List<Note>>(serializedNoteList);
+                }
+                else
+                {
+                    noteList = await NoteBL.GetAllNotes();
+                    serializedNoteList = JsonConvert.SerializeObject(noteList);
+                    redisnoteList = Encoding.UTF8.GetBytes(serializedNoteList);
+                }
+                return this.Ok(noteList);
+
             }
             catch (Exception)
             {
@@ -83,7 +104,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("Delete/{noteID}")]
         public IActionResult DeleteNote(int noteID)
         {
             try
@@ -106,7 +127,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("{noteID}/{color}")]
+        [HttpPut("changeColor/{noteID}/{color}")]
         public async Task<IActionResult> changeColor(int noteID, string color)
         {
             try
@@ -129,7 +150,8 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("{noteID}/{Isarchieve}")]
+        //[HttpPut("{noteID}/{Isarchieve}")]
+        [HttpPut("ArchiveNote/{noteID}")]
         public async Task<IActionResult> IsArchieve(int noteID)
         {
             try
@@ -150,7 +172,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("{noteID}/{IsTrash}")]
+        [HttpPut(" IsTrash/{noteID}")]
         public async Task<IActionResult> IsTrash(int noteID)
         {
             try
@@ -171,7 +193,7 @@ namespace FundooNotes.Controllers
             }
         }
         [Authorize]
-        [HttpPut("{noteID}/{IsPin}")]
+        [HttpPut("IsPin/{noteID}")]
 
         public async Task<IActionResult> IsPin(int noteID)
         {
@@ -192,6 +214,5 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
-
     }
 }

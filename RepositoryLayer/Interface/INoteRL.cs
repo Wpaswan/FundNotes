@@ -10,7 +10,7 @@ namespace RepositoryLayer.Interface
     {
         Task CreateNotes(int userId, NotePostModel notePost);
         public bool UpdateNotes(int noteID, NotePostModel notesPost);
-        public IEnumerable<Note> GetAllNotes();
+        Task<List<Note>> GetAllNotes();
         public bool DeleteNote(int notesID);
         Task<List<Note>> changeColor(int noteID, string color);
         Task ArchieveNote(int noteId);

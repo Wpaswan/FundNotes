@@ -46,17 +46,19 @@ namespace BusinessLayer.Services
             }
         }
 
-        public IEnumerable<Note> GetAllNotes()
+        public async Task<List<Note>> GetAllNotes()
         {
+
             try
             {
-                return noteRL.GetAllNotes();
+                return await noteRL.GetAllNotes();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
+
         }
 
         public bool UpdateNotes(int noteID, NotePostModel notesModel)
