@@ -51,7 +51,18 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
-        
+        public bool RemoveLabel(int userID, string labelName)
+        {
+            try
+            {
+                return labelRL.RemoveLabel(userID, labelName);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

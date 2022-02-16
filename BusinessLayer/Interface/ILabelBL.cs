@@ -12,6 +12,7 @@ namespace BusinessLayer.Interface
         Task CreateLabel(int noteId, int userId, LabelModal labelModal);
         public IEnumerable<Labels> GetLabelsByNoteID(int userID, int noteID);
         public bool RenameLabel(int userID, string oldLabelName, string labelName);
+        public bool RemoveLabel(int userID, string labelName);
 
     }
 }

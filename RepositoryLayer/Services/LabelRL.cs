@@ -81,6 +81,25 @@ namespace RepositoryLayer.Services
             }
 
         }
+        public bool RemoveLabel(int userID, string labelName)
+        {
+            IEnumerable<Labels> labels;
+            labels = dbContext.Labels.Where(e => e.userId == userID && e.LabelName == labelName).ToList();
+            if (labels != null)
+            {
+                foreach (var label in labels)
+                {
+                    dbContext.Labels.Remove(label);
+                }
+                dbContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
 
     }
 }

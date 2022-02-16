@@ -81,6 +81,28 @@ namespace FundooNotes.Controllers
             }
 
         }
+        [Authorize]
+        [HttpDelete("RemoveLabel/{lableName}")]
+        public IActionResult RemoveLabel(string lableName)
+        {
+            try
+            {
+                int userID = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                if (labelBL.RemoveLabel(userID, lableName))
+                {
+                    return this.Ok(new { success = true, message = "Label removed successfully", response = lableName });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "User access denied" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }
