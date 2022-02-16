@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,7 @@
 ﻿using CommonLayer.Note;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace RepositoryLayer.Services
                 var user = dbContext.Users.FirstOrDefault(x => x.userId==userId);
                 Note note = new Note();
 
-                note.NotesId=new Note().NotesId;
+                note.NoteId=new Note().NoteId;
                 note.Title=notePost.Title;
                 note.Description=notePost.Description;
                 note.CreatedDate=DateTime.Now;
@@ -49,7 +50,7 @@ namespace RepositoryLayer.Services
 
         public bool UpdateNotes(int noteID, NotePostModel notesPost)
         {
-            Note notes = dbContext.Note.Where(e => e.NotesId==noteID).FirstOrDefault();
+            Note notes = dbContext.Note.Where(e => e.NoteId==noteID).FirstOrDefault();
             notes.Title = notesPost.Title;
             notes.Description=notesPost.Description;
             dbContext.Note.Update(notes);
@@ -67,7 +68,7 @@ namespace RepositoryLayer.Services
         //Below is function of DeleteNote
         public bool DeleteNote(int notesID)
         {
-            Note notes = dbContext.Note.Where(e => e.NotesId == notesID).FirstOrDefault();
+            Note notes = dbContext.Note.Where(e => e.NoteId == notesID).FirstOrDefault();
             if (notes != null)
             {
                 dbContext.Note.Remove(notes);
@@ -84,7 +85,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteID);
+                var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteID);
                 note.color=color;
                 await dbContext.SaveChangesAsync();
                 return await dbContext.Note.ToListAsync();
@@ -99,7 +100,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteId);
                 note.IsArchive=true;
                 await dbContext.SaveChangesAsync();
 
@@ -113,7 +114,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteId);
                 note.IsTrash=true;
                 await dbContext.SaveChangesAsync();
 
@@ -128,7 +129,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Note.FirstOrDefault(u => u.NotesId==noteId);
+                var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteId);
                 note.IsPin=true;
                 await dbContext.SaveChangesAsync();
 
