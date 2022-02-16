@@ -39,6 +39,19 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+        public bool RenameLabel(int userID, string oldLabelName, string labelName)
+        {
+            try
+            {
+                return labelRL.RenameLabel(userID, oldLabelName, labelName);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        
 
     }
 }

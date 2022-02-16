@@ -58,6 +58,29 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
+        [Authorize]
+        [HttpPut("lableName/{lableName}/{newLabelName}")]
+        public IActionResult RenameLabel(string lableName, string newLabelName)
+        {
+            try
+            {
+                int userID = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                if (labelBL.RenameLabel(userID, lableName, newLabelName))
+                {
+                    return this.Ok(new { success = true, message = "Label renamed successfully", response = lableName, newLabelName });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "User access denied" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
 
     }
 }
