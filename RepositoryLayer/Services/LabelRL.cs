@@ -42,7 +42,26 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
-       
+        public IEnumerable<Labels> GetLabelsByNoteID(int userID, int noteID)
+        {
+            try
+            {
+                var result = dbContext.Labels.Where(e => e.NoteID == noteID && e.userId == userID).ToList();
+                if (result!=null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Label;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,18 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
-        
+        public IEnumerable<Labels> GetLabelsByNoteID(int userID, int noteID)
+        {
+            try
+            {
+                return labelRL.GetLabelsByNoteID(userID, noteID);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

@@ -43,7 +43,21 @@ namespace FundooNotes.Controllers
             }
 
         }
-       
+        [Authorize]
+        [HttpGet("GetLabelsByNoteID/{noteID}")]
+        public IEnumerable GetLabelsByNoteID(int noteID)
+        {
+            try
+            {
+                int userID = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                return labelBL.GetLabelsByNoteID(userID, noteID);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }
