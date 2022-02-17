@@ -2,8 +2,10 @@
 using CommonLayer.Label;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -96,6 +98,32 @@ namespace FundooNotes.Controllers
                 {
                     return this.BadRequest(new { success = false, message = "User access denied" });
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpGet(" GetAllLabels")]
+        public async Task<IActionResult> GetAllLabels()
+        {
+
+            try
+            {
+                int userID = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type== "userId").Value);
+
+                var LabelList = new List<Labels>();
+                var NoteList = new List<Note>();
+                LabelList = await labelBL.GetAllLabels(userID);
+
+
+
+                return this.Ok(new { Success = true, message = $"GetAll Labels of UserId={userID} ", data = LabelList });
+                return this.Ok(new { Success = true, message = $"GetAll Notes of UserId={userID} ", data = NoteList });
+
+
             }
             catch (Exception)
             {

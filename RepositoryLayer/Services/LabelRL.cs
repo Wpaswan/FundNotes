@@ -100,6 +100,23 @@ namespace RepositoryLayer.Services
             }
 
         }
+        public async Task<List<Labels>> GetAllLabels(int userId)
+        {
+            Labels labels = new Labels();
+            try
+            {
+                return await dbContext.Labels.Where(u => u.userId == userId)
+                    .Include(u => u.notes)
+                    .Include(u => u.Users)
+                    .ToListAsync();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

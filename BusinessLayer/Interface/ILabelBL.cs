@@ -13,6 +13,7 @@ namespace BusinessLayer.Interface
         public IEnumerable<Labels> GetLabelsByNoteID(int userID, int noteID);
         public bool RenameLabel(int userID, string oldLabelName, string labelName);
         public bool RemoveLabel(int userID, string labelName);
+        Task<List<Labels>> GetAllLabels(int userId);
 
     }
 }
