@@ -50,6 +50,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+        public async Task DeleteAddress(int userId)
+        {
+            try
+            {
+                await addressRL.DeleteAddress(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 

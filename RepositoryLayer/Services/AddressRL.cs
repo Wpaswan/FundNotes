@@ -71,6 +71,18 @@ namespace RepositoryLayer.Services
              .Include(u => u.User)
              .ToListAsync();
         }
+        public async Task DeleteAddress(int userId)
+        {
+            UserAddress address = dbContext.UserAddresses.Where(e => e.userId == userId).FirstOrDefault();
+            if (address != null)
+            {
+                dbContext.UserAddresses.Remove(address);
+                await dbContext.SaveChangesAsync();
+
+            }
+
+
+        }
 
 
 

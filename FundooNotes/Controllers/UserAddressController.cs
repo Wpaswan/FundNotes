@@ -80,6 +80,22 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
+        [Authorize]
+        [HttpDelete("DeleteAddress/{userId}")]
+        public async Task<ActionResult> DeleteAddress(int userId)
+        {
+            try
+            {
+                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
+                await this.addressBL.DeleteAddress(userid);
+                return this.Ok(new { success = true, message = $"Address deleted of userId={userId}" });
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
