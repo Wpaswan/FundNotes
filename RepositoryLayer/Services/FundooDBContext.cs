@@ -1,6 +1,7 @@
 ﻿using CommonLayer.Note;
 using CommonLayer.User;
 using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace RepositoryLayer.Services
         public DbSet<User> Users { get; set; }
         public DbSet<Note> Note { get; set; }
         public DbSet<Labels> Labels { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
         public FundooDBContext(DbContextOptions options) : base(options)
         { }
 

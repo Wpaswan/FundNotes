@@ -39,11 +39,14 @@ namespace FundooNotes
             services.AddDbContext<FundooDBContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooNotes"]));
             services.AddControllers();
             services.AddMemoryCache();
-
+          
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost:6379";
             });
+           // services.AddControllers().AddNewtonsoftJson(options =>
+           // options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+           //);
             //adds swagger generator to the services collection
 
             services.AddSwaggerGen(setup =>
@@ -71,8 +74,10 @@ namespace FundooNotes
             //services.AddTransient<IUserBL,UserBL>();
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
-            services.AddTransient<INoteBL, NoteBL>();
+            services.AddTransient<INoteBL,NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
+            services.AddTransient<IAddressBL,AddressBL>();
+            services.AddTransient<IAddressRL, AddressRL>();
             services.AddTransient<ILabelBL, LableBL>();
             services.AddTransient<ILabelRL, LabelRL>();
 
@@ -93,7 +98,7 @@ namespace FundooNotes
 
                 };
             });
-        }
+            }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
