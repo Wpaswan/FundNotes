@@ -39,6 +39,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+        public async Task<List<UserAddress>> GetAllAddress(int userId)
+        {
+            try
+            {
+                return await addressRL.GetAllAddress(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 

@@ -61,6 +61,25 @@ namespace FundooNotes.Controllers
                 throw ex;
             }
         }
+        [Authorize]
+        [HttpGet("GetAllAddress")]
+        public async Task<IActionResult> GetAllAddress()
+        {
+            try
+            {
+                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
+                var addressList = new List<UserAddress>();
+                addressList = await this.addressBL.GetAllAddress(userid);
+
+                return this.Ok(new { Success = true, message = $"GetAll note successfull ", data = addressList });
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
 
 

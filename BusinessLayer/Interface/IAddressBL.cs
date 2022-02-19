@@ -11,6 +11,7 @@ namespace BusinessLayer.Interface
     {
         public Task AddAddress(int userId, UserAddressPostModal userAddressPostModal);
         public Task UpdateAddress(int userId, UserAddressPostModal userAddressPost);
+        Task<List<UserAddress>> GetAllAddress(int userId);
 
     }
 }

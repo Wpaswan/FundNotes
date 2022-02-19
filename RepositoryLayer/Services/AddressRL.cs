@@ -64,6 +64,13 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+        public async Task<List<UserAddress>> GetAllAddress(int userId)
+        {
+            return await dbContext.UserAddresses.Where(u => u.userId == userId)
+
+             .Include(u => u.User)
+             .ToListAsync();
+        }
 
 
 
