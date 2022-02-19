@@ -10,6 +10,7 @@ namespace BusinessLayer.Interface
     public interface IAddressBL
     {
         public Task AddAddress(int userId, UserAddressPostModal userAddressPostModal);
-       
+        public Task UpdateAddress(int userId, UserAddressPostModal userAddressPost);
+
     }
 }

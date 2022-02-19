@@ -41,9 +41,29 @@ namespace FundooNotes.Controllers
                 throw ex;
             }
         }
-       
-       
-        
+        [Authorize]
+        [HttpPut("UpdateAddress/{userId}")]
+        public async Task<ActionResult> UpdateAddress(int userId, UserAddressPostModal userAddressPost)
+        {
+            try
+            {
+
+                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
+
+                await this.addressBL.UpdateAddress(userid, userAddressPost);
+
+                return this.Ok(new { success = true, message = $"Address updated successfully of userId={userId}", data = userAddressPost });
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
 
     }
 }

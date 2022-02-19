@@ -28,8 +28,19 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+        public async Task UpdateAddress(int userId, UserAddressPostModal userAddressPost)
+        {
+            try
+            {
+                await addressRL.UpdateAddress(userId, userAddressPost);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-        
-      
+
+
     }
 }

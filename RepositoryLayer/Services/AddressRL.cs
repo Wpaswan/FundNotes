@@ -42,8 +42,30 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+        public async Task UpdateAddress(int userId, UserAddressPostModal userAddressPost)
+        {
+            try
+            {
+                var user = dbContext.Users.FirstOrDefault(x => x.userId==userId);
+                UserAddress userAddress = new UserAddress();
+                userAddress.userId = userId;
+                userAddress.AddressId=new UserAddress().AddressId;
+                userAddress.Address = userAddressPost.Address;
+                userAddress.State = userAddressPost.State;
+                userAddress.City = userAddressPost.City;
+                dbContext.UserAddresses.Add(userAddress);
+                await dbContext.SaveChangesAsync();
 
-      
-        
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
     }
 }

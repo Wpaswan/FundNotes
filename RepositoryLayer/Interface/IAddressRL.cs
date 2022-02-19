@@ -10,7 +10,7 @@ namespace RepositoryLayer.Interface
     public interface IAddressRL
     {
         public Task AddAddress(int userId, UserAddressPostModal userAddressPostModal);
-       
+        public Task UpdateAddress(int userId, UserAddressPostModal userAddressPost);
 
     }
 }
