@@ -1,5 +1,5 @@
 ﻿using CommonLayer.User;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

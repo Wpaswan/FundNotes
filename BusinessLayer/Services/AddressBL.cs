@@ -16,53 +16,42 @@ namespace BusinessLayer.Services
         {
             this.addressRL = addressRL;
         }
-        public async Task AddAddress(int userId, UserAddressPostModal userAddressPostModal)
+       
+
+        public bool AddUserAddress(UserAddressPostModal userAddress, int userId)
         {
             try
             {
-                await addressRL.AddAddress(userId, userAddressPostModal);
+                return addressRL.AddUserAddress(userAddress, userId);
 
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
+            };
         }
-        public async Task UpdateAddress(int userId, UserAddressPostModal userAddressPost)
-        {
-            try
-            {
-                await addressRL.UpdateAddress(userId, userAddressPost);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+
         public async Task<List<UserAddress>> GetAllAddress(int userId)
         {
-            try
-            {
+            try{
                 return await addressRL.GetAllAddress(userId);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw ex;
             }
-        }
-        public async Task DeleteAddress(int userId)
+            }
+
+        public async Task UpdateUserAddress(UserAddressPostModal userAddress, int userId, int AddressId)
         {
             try
             {
-                await addressRL.DeleteAddress(userId);
+                await addressRL.UpdateUserAddress(userAddress,AddressId, AddressId);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
-
-
     }
 }

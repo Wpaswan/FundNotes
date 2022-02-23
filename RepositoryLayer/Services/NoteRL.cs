@@ -1,7 +1,8 @@
 ﻿using CommonLayer.Note;
+using CommonLayer.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,14 @@ namespace RepositoryLayer.Services
         {
             this.dbContext = dbContext;
         }
+
         public async Task CreateNotes(int userId, NotePostModel notePost)
         {
             try
             {
                 var user = dbContext.Users.FirstOrDefault(x => x.userId==userId);
-                Note note = new Note();
-
+                Note note=new Note();
+                note.userId=userId;
                 note.NoteId=new Note().NoteId;
                 note.Title=notePost.Title;
                 note.Description=notePost.Description;
@@ -38,7 +40,7 @@ namespace RepositoryLayer.Services
 
                 dbContext.Note.Add(note);
                 await dbContext.SaveChangesAsync();
-
+                
 
 
             }
@@ -50,22 +52,31 @@ namespace RepositoryLayer.Services
 
         public bool UpdateNotes(int noteID, NotePostModel notesPost)
         {
-            Note notes = dbContext.Note.Where(e => e.NoteId==noteID).FirstOrDefault();
+            Note notes=dbContext.Note.Where(e => e.NoteId==noteID).FirstOrDefault();
             notes.Title = notesPost.Title;
             notes.Description=notesPost.Description;
             dbContext.Note.Update(notes);
-            var result = dbContext.SaveChangesAsync();
+            var result=dbContext.SaveChangesAsync();
             if (result!=null)
-                return true;
+               return true;
             else
-                return false;
+                 return false;
+            
+        }
 
-        }
-        public async Task<List<Note>> GetAllNotes()
+        public async Task<List<Note>> GetAllNotes(int userId)
         {
-            return await dbContext.Note.ToListAsync();
+            
+            return await dbContext.Note.Where(u => u.userId == userId)
+               
+                .Include(u => u.User)
+                .Include(u => u.Label)
+                .Include(u => u.Collab)
+                .Include(u => u.UserAddresses)
+                .ToListAsync();
         }
-        //Below is function of DeleteNote
+
+
         public bool DeleteNote(int notesID)
         {
             Note notes = dbContext.Note.Where(e => e.NoteId == notesID).FirstOrDefault();
@@ -85,17 +96,18 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteID);
+                var note=dbContext.Note.FirstOrDefault(u=> u.NoteId==noteID);
                 note.color=color;
                 await dbContext.SaveChangesAsync();
                 return await dbContext.Note.ToListAsync();
 
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 throw e;
             }
         }
+
         public async Task ArchieveNote(int noteId)
         {
             try
@@ -103,13 +115,14 @@ namespace RepositoryLayer.Services
                 var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteId);
                 note.IsArchive=true;
                 await dbContext.SaveChangesAsync();
-
+                
             }
             catch (Exception e)
             {
 
             }
         }
+
         public async Task TrashNote(int noteId)
         {
             try
@@ -138,6 +151,8 @@ namespace RepositoryLayer.Services
             {
                 throw e;
             }
+
         }
     }
+    
 }

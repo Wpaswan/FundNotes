@@ -2,7 +2,7 @@
 using CommonLayer.Label;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -114,7 +114,7 @@ namespace FundooNotes.Controllers
             {
                 int userID = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type== "userId").Value);
 
-                var LabelList = new List<Labels>();
+                var LabelList = new List<LabelResponse>();
                 var NoteList = new List<Note>();
                 LabelList = await labelBL.GetAllLabels(userID);
 

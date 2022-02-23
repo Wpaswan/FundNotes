@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Label;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -63,17 +63,24 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
-        public async Task<List<Labels>> GetAllLabels(int userId)
+
+      
+
+       
+
+        public Task<List<LabelResponse>> GetAllLabels(int userId)
         {
             try
             {
-                return await labelRL.GetAllLabels(userId);
+                return labelRL.GetAllLabels(userId);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw ex;
             }
         }
-
     }
+         
+        
+    
 }

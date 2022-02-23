@@ -21,49 +21,57 @@ namespace FundooNotes.Controllers
         {
             this.addressBL = addressBL;
         }
-        [AllowAnonymous]
-        [HttpPost("AddAddress")]
-        public async Task<ActionResult> AddAddress(UserAddressPostModal userAddressPost)
+        [Authorize]
+        [HttpPost(" AddUserAddress")]
+        public IActionResult AddUserAddress(UserAddressPostModal userAddress)
         {
             try
             {
 
-                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
+                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "userId").Value);
 
-                await this.addressBL.AddAddress(userid, userAddressPost);
 
-                return this.Ok(new { success = true, message = $"Address added successfully " });
+                 this.addressBL.AddUserAddress(userAddress, userid);
+                
+               
+                    return this.Ok(new { success = true, Message = $"Address is created" });
+               
+               
+               
+                    return this.BadRequest(new { Success = false, message = "Address Type exists, it can't be added" });
+                
 
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
         }
         [Authorize]
-        [HttpPut("UpdateAddress/{userId}")]
-        public async Task<ActionResult> UpdateAddress(int userId, UserAddressPostModal userAddressPost)
+        [HttpPut("updateUserAddress/{AddressId}")]
+        public async Task<IActionResult> UpdateUserAddress(UserAddressPostModal userAddress, int AddressId)
         {
             try
             {
+                var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Int32.Parse(userId.Value);
 
-                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
-
-                await this.addressBL.UpdateAddress(userid, userAddressPost);
-
-                return this.Ok(new { success = true, message = $"Address updated successfully of userId={userId}", data = userAddressPost });
+                await this.addressBL.UpdateUserAddress(userAddress, UserId, AddressId);
 
 
+                return this.Ok(new { success = true, Message = $"Address is updated successfull" });
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
+
         }
+
         [Authorize]
         [HttpGet("GetAllAddress")]
-        public async Task<IActionResult> GetAllAddress()
+        public async Task<ActionResult> GetAllAddress()
         {
             try
             {
@@ -71,7 +79,7 @@ namespace FundooNotes.Controllers
                 var addressList = new List<UserAddress>();
                 addressList = await this.addressBL.GetAllAddress(userid);
 
-                return this.Ok(new { Success = true, message = $"GetAll note successfull ", data = addressList });
+                return this.Ok(new { Success = true, message = $"GetAll Address successfull ", data = addressList });
 
             }
             catch (Exception)
@@ -80,25 +88,6 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpDelete("DeleteAddress/{userId}")]
-        public async Task<ActionResult> DeleteAddress(int userId)
-        {
-            try
-            {
-                int userid = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type=="userId").Value);
-                await this.addressBL.DeleteAddress(userid);
-                return this.Ok(new { success = true, message = $"Address deleted of userId={userId}" });
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-
 
     }
 }

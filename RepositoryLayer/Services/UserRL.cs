@@ -2,7 +2,7 @@
 using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;

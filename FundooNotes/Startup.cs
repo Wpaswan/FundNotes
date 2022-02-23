@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RepositoryLayer.Class;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
@@ -44,9 +45,9 @@ namespace FundooNotes
             {
                 options.Configuration = "localhost:6379";
             });
-           // services.AddControllers().AddNewtonsoftJson(options =>
-           // options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-           //);
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+           );
             //adds swagger generator to the services collection
 
             services.AddSwaggerGen(setup =>
@@ -80,6 +81,8 @@ namespace FundooNotes
             services.AddTransient<IAddressRL, AddressRL>();
             services.AddTransient<ILabelBL, LableBL>();
             services.AddTransient<ILabelRL, LabelRL>();
+           services.AddTransient<ICollabBL, CollabBL>();
+            services.AddTransient<ICollabRL, CollabRL>();
 
             services.AddAuthentication(x =>
             {

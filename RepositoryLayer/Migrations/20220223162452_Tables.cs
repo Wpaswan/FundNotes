@@ -15,8 +15,8 @@ namespace RepositoryLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     fName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     lName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     phoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -34,7 +34,7 @@ namespace RepositoryLayer.Migrations
                 {
                     NoteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<int>(type: "int", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsReminder = table.Column<bool>(type: "bit", nullable: false),
@@ -52,29 +52,34 @@ namespace RepositoryLayer.Migrations
                         column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "userId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserAddresses",
+                name: "Collab",
                 columns: table => new
                 {
-                    AddressId = table.Column<int>(type: "int", nullable: false)
+                    CollabId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    collabEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoteID = table.Column<int>(type: "int", nullable: true),
+                    userId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserAddresses", x => x.AddressId);
+                    table.PrimaryKey("PK_Collab", x => x.CollabId);
                     table.ForeignKey(
-                        name: "FK_UserAddresses_Users_userId",
+                        name: "FK_Collab_Note_NoteID",
+                        column: x => x.NoteID,
+                        principalTable: "Note",
+                        principalColumn: "NoteId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Collab_Users_userId",
                         column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "userId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,8 +89,8 @@ namespace RepositoryLayer.Migrations
                     LabelID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LabelName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NoteID = table.Column<int>(type: "int", nullable: false),
-                    userId = table.Column<int>(type: "int", nullable: false)
+                    NoteID = table.Column<int>(type: "int", nullable: true),
+                    userId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -104,6 +109,45 @@ namespace RepositoryLayer.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserAddresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<int>(type: "int", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Home"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoteId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAddresses", x => x.AddressId);
+                    table.ForeignKey(
+                        name: "FK_UserAddresses_Note_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "Note",
+                        principalColumn: "NoteId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserAddresses_Users_userId",
+                        column: x => x.userId,
+                        principalTable: "Users",
+                        principalColumn: "userId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collab_NoteID",
+                table: "Collab",
+                column: "NoteID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collab_userId",
+                table: "Collab",
+                column: "userId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Labels_NoteID",
                 table: "Labels",
@@ -120,6 +164,11 @@ namespace RepositoryLayer.Migrations
                 column: "userId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserAddresses_NoteId",
+                table: "UserAddresses",
+                column: "NoteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserAddresses_userId",
                 table: "UserAddresses",
                 column: "userId");
@@ -133,6 +182,9 @@ namespace RepositoryLayer.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Collab");
+
             migrationBuilder.DropTable(
                 name: "Labels");
 

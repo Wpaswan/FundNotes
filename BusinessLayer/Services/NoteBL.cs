@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Note;
-using RepositoryLayer.Entity;
+using CommonLayer.User;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -9,30 +10,61 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services
 {
-    public class NoteBL:INoteBL
+    public class NoteBL : INoteBL
     {
-        
-            INoteRL noteRL;
-            public NoteBL(INoteRL noteRL)
+        INoteRL noteRL;
+        public NoteBL(INoteRL noteRL)
+        {
+            this.noteRL = noteRL;
+        }
+
+        public async Task CreateNotes(int userId, NotePostModel notePost)
+        {
+            try
             {
-                this.noteRL = noteRL;
+                 await noteRL.CreateNotes(userId, notePost);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+       
+
+        public bool UpdateNotes(int noteID, NotePostModel notesModel)
+        {
+            try
+            {
+                if (noteRL.UpdateNotes(noteID,notesModel))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public async Task<List<Note>> GetAllNotes(int userId)
+        {
+
+            try
+            {
+                return await noteRL.GetAllNotes(userId);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
 
-            public async Task CreateNotes(int userId, NotePostModel notePost)
-            {
-                try
-                {
-                    await noteRL.CreateNotes(userId, notePost);
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-            }
+        }
+
 
         public bool DeleteNote(int notesID)
         {
-
             try
             {
                 if (noteRL.DeleteNote(notesID))
@@ -47,37 +79,7 @@ namespace BusinessLayer.Services
             }
         }
 
-        public async Task<List<Note>> GetAllNotes()
-        {
-
-            try
-            {
-                return await noteRL.GetAllNotes();
-            }
-            catch (Exception e)
-            {
-
-                throw e;
-            }
-
-        }
-
-        public bool UpdateNotes(int noteID, NotePostModel notesModel)
-        {
-            try
-            {
-                if (noteRL.UpdateNotes(noteID, notesModel))
-                    return true;
-                else
-                    return false;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-        public async Task<List<Note>> changeColor(int noteID, string color)
+        public  async Task<List<Note>> changeColor(int noteID, string color)
         {
             try
             {
@@ -93,13 +95,14 @@ namespace BusinessLayer.Services
         {
             try
             {
-                await noteRL.ArchieveNote(noteId);
+                 await noteRL.ArchieveNote(noteId);
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public async Task TrashNote(int noteId)
         {
             try
@@ -111,6 +114,7 @@ namespace BusinessLayer.Services
                 throw e;
             }
         }
+
         public async Task IsPin(int noteId)
         {
             try
@@ -124,4 +128,5 @@ namespace BusinessLayer.Services
 
         }
     }
-    }
+} 
+

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RepositoryLayer.Services
+namespace RepositoryLayer.Services 
 {
     public class AddressRL:IAddressRL
     {
@@ -20,50 +20,66 @@ namespace RepositoryLayer.Services
             this.dbContext = dbContext;
         }
 
-        public async Task AddAddress(int userId, UserAddressPostModal userAddressPostModal)
+      
+         public bool AddUserAddress(UserAddressPostModal userAddress, int userId)
         {
             try
             {
-                var user = dbContext.Users.FirstOrDefault(x => x.userId==userId);
-                UserAddress userAddress = new UserAddress();
-                userAddress.userId = userId;
-               userAddress.AddressId=new UserAddress().AddressId;
-                userAddress.Address = userAddressPostModal.Address;
-                userAddress.State = userAddressPostModal.State;
-                userAddress.City = userAddressPostModal.City;
-                dbContext.UserAddresses.Add(userAddress);
-                await dbContext.SaveChangesAsync();
+                var UserAddress = dbContext.UserAddresses.FirstOrDefault(x => x.userId == userId);
+                UserAddress useraddress = new UserAddress();
+                useraddress.userId = userId;
+                useraddress.AddressId = new UserAddress().AddressId;
+                useraddress.State = userAddress.State;
+                useraddress.City = userAddress.City;
+                useraddress.Type = userAddress.Type;
+                if (useraddress.Type == "Home")
+                {
+                    useraddress.Type = "Home";
+                }
+                else if (useraddress.Type == "Work")
+                {
+                    useraddress.Type = "Work";
+                }
+                else
+                {
+                    useraddress.Type = "Other";
+                }
+               
 
+                dbContext.UserAddresses.Add(useraddress);
+                dbContext.SaveChanges();
+                return default;
 
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
         }
-        public async Task UpdateAddress(int userId, UserAddressPostModal userAddressPost)
+
+        public async Task UpdateUserAddress(UserAddressPostModal userAddress, int userId, int AddressId)
         {
             try
             {
-                var user = dbContext.Users.FirstOrDefault(x => x.userId==userId);
-                UserAddress userAddress = new UserAddress();
-                userAddress.userId = userId;
-                userAddress.AddressId=new UserAddress().AddressId;
-                userAddress.Address = userAddressPost.Address;
-                userAddress.State = userAddressPost.State;
-                userAddress.City = userAddressPost.City;
-                dbContext.UserAddresses.Add(userAddress);
+                UserAddress useraddress = dbContext.UserAddresses.Where(e => e.userId == userId).FirstOrDefault();
+                useraddress.Type = userAddress.Type;
+                useraddress.City = userAddress.City;
+                useraddress.State = userAddress.State;
+
+                dbContext.UserAddresses.Update(useraddress);
                 await dbContext.SaveChangesAsync();
 
-
-
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
+
         }
+
+
+
         public async Task<List<UserAddress>> GetAllAddress(int userId)
         {
             return await dbContext.UserAddresses.Where(u => u.userId == userId)
@@ -71,20 +87,5 @@ namespace RepositoryLayer.Services
              .Include(u => u.User)
              .ToListAsync();
         }
-        public async Task DeleteAddress(int userId)
-        {
-            UserAddress address = dbContext.UserAddresses.Where(e => e.userId == userId).FirstOrDefault();
-            if (address != null)
-            {
-                dbContext.UserAddresses.Remove(address);
-                await dbContext.SaveChangesAsync();
-
-            }
-
-
-        }
-
-
-
     }
 }

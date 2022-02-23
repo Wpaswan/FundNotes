@@ -2,7 +2,6 @@
 using CommonLayer.User;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Entities;
-using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +16,7 @@ namespace RepositoryLayer.Services
         public DbSet<Note> Note { get; set; }
         public DbSet<Labels> Labels { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Collab> Collab { get; set; }
         public FundooDBContext(DbContextOptions options) : base(options)
         { }
 
@@ -28,16 +28,10 @@ namespace RepositoryLayer.Services
                .HasIndex(u => u.email)
                .IsUnique();
 
-            //   modelBuilder.Entity<Labels>()
-            //   .HasOne(u => u.Users)
-            //   .WithMany()
-            //   .HasForeignKey(u => u.userId)
-            ////   .OnDelete(DeleteBehavior.Cascade); //Cascade behaviour
-            ////   modelBuilder.Entity<Labels>()
-            ////.HasOne(u => u.notes)
-            ////.WithMany()
-            ////.HasForeignKey(u => u.NoteID)
-            //.OnDelete(DeleteBehavior.Cascade); //Cascade behaviour
+           
+            modelBuilder.Entity<UserAddress>()
+               .Property(b => b.Type)
+               .HasDefaultValue("Home");
 
 
         }

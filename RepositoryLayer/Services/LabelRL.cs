@@ -1,7 +1,8 @@
 ﻿using CommonLayer.Label;
+using CommonLayer.Note;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -26,15 +27,25 @@ namespace RepositoryLayer.Services
 
                 var user = dbContext.Users.FirstOrDefault(e => e.userId==userId);
                 var note = dbContext.Note.FirstOrDefault(u => u.NoteId==noteId);
+                Labels labels = new Labels
+                {
+                
+                    Users = user,
 
+                    notes = note
+                };
 
-                Labels labels = new Labels();
+               
                 labels.userId=userId;
                 labels.NoteID=noteId;
                 labels.LabelID=new Labels().LabelID;
                 labels.LabelName=labelModal.LabelName;
                 dbContext.Labels.Add(labels);
                 await dbContext.SaveChangesAsync();
+                 await dbContext.Labels.Where(u => u.userId == userId)
+                   .Include(u => u.Users)
+                   .Include(u => u.notes)
+                    .ToListAsync();
 
             }
             catch (Exception ex)
@@ -64,23 +75,21 @@ namespace RepositoryLayer.Services
         }
         public bool RenameLabel(int userID, string oldLabelName, string labelName)
         {
-            IEnumerable<Labels> labels;
-            labels = dbContext.Labels.Where(e => e.userId==userID&&e.LabelName==oldLabelName).ToList();
-            if (labels != null)
+            Labels labels = new Labels();
+
+            labels= dbContext.Labels.FirstOrDefault(e => e.userId==userID&&e.LabelName==oldLabelName);
+
+            if (labels!=null)
             {
-                foreach (var label in labels)
-                {
-                    label.LabelName = labelName;
-                }
+                labels.LabelName=labelName;
                 dbContext.SaveChanges();
                 return true;
             }
-            else
-            {
-                return false;
-            }
 
+
+            return false;
         }
+
         public bool RemoveLabel(int userID, string labelName)
         {
             IEnumerable<Labels> labels;
@@ -100,23 +109,56 @@ namespace RepositoryLayer.Services
             }
 
         }
-        public async Task<List<Labels>> GetAllLabels(int userId)
+
+
+
+        public async Task<List<LabelResponse>> GetAllLabels(int userId)
         {
             Labels labels = new Labels();
             try
             {
-                return await dbContext.Labels.Where(u => u.userId == userId)
-                    .Include(u => u.notes)
-                    .Include(u => u.Users)
-                    .ToListAsync();
+
+                return await dbContext.Labels.Where(l => l.userId == userId)
+
+                  .Join(dbContext.Users
+                  .Join(dbContext.Note,
+                    u => u.userId,
+                    n => n.userId,
+                    (u, n) => new NoteUserResponse
+                    {
+                        userId= u.userId,
+                        NotesId=n.NoteId,
+                        fName=u.fName,
+                        lName=u.lName,
+                        color=n.color,
+                        RegisteredDate= n.CreatedDate,
+                        Title = n.Title,
+                        Description = n.Description,
+                        email=u.email,
+
+                    }),
+                   l => l.notes.NoteId,
+                    un => un.NotesId,
+                    (l, un) => new LabelResponse
+                    {
+                        userId=un.userId,
+                        NotesId=l.notes.NoteId,
+                        Title=un.Title,
+                        Description=un.Description,
+                        RegisteredDate=un.RegisteredDate,
+                        color=un.color,
+                        fName=un.fName,
+                        lName=un.lName,
+                        email=un.email,
+                        LabelName=l.LabelName
 
 
+                    }).ToListAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
     }
 }

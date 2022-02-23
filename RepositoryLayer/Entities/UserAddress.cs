@@ -1,5 +1,4 @@
-﻿using RepositoryLayer.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,11 +13,13 @@ namespace RepositoryLayer.Entities
         [Required]
         public int AddressId { get; set; }
         [ForeignKey("User")]
-        public int userId { get; set; }
+        public int? userId { get; set; }
 
-        public string Address { get; set; }
-       
-        
+        [Required]
+        public string Type { get; set; }
+
+
+
         public string City { get; set; }
        
         public string State { get; set; }

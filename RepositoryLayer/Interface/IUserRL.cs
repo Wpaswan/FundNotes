@@ -1,5 +1,5 @@
 ﻿using CommonLayer.User;
-using RepositoryLayer.Entity;
+using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,7 @@ namespace RepositoryLayer.Interface
         string LogInUser(UserLogin userLogIn);
         bool ForgetPassword(string email);
         void ResetPassword(string email, string password, string cPassword);
-
+        
         List<User> GetAllUsers();
     }
 }
