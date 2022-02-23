@@ -11,6 +11,7 @@ namespace BusinessLayer.Interface
     {
         Task<List<Collab>> CreateCollab(CollabPostModel collabPost, int NotesId, int UserId);
         Task RemoveCollab(int CollabId, int Userid);
+        Task<List<Collab>> GetAllCollabs(int Userid);
 
 
     }

@@ -63,6 +63,23 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+        public async Task<List<Collab>> GetAllCollabs(int Userid)
+        {
+            try
+            {
+                Collab collabarator = new Collab();
+                return await dbContext.Collab.Where(u => u.userId == Userid)
+                    .Include(u => u.Note)
+                    .Include(u => u.User)
+                    .ToListAsync();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
     }

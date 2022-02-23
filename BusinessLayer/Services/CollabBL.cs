@@ -38,6 +38,19 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+        public Task<List<Collab>> GetAllCollabs(int Userid)
+        {
+            try
+            {
+                return CollabRL.GetAllCollabs(Userid);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
 
 
     }
