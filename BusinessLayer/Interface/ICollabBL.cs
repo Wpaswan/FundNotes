@@ -10,7 +10,8 @@ namespace BusinessLayer.Interface
     public interface ICollabBL
     {
         Task<List<Collab>> CreateCollab(CollabPostModel collabPost, int NotesId, int UserId);
-    
+        Task RemoveCollab(int CollabId, int Userid);
+
 
     }
 }

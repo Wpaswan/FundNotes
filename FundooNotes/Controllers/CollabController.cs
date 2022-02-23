@@ -44,7 +44,26 @@ namespace FundooNotes.Controllers
             }
 
         }
-       
+        [Authorize]
+        [HttpDelete("deleteCollabs/{CollabId}")]
+        public async Task<IActionResult> RemoveCollabs(int CollabId)
+        {
+            try
+            {
+                var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Int32.Parse(userId.Value);
+
+                await collabBL.RemoveCollab(CollabId, UserId);
+
+                return this.Ok(new { success = true, message = "Collabartion deleted successfully", response = CollabId });
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }
 

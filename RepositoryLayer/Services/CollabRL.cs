@@ -44,7 +44,26 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+        public async Task RemoveCollab(int CollabId, int Userid)
+        {
+            try
+            {
+                Collab collabarator = await dbContext.Collab.Where(u => u.CollabId == CollabId).FirstOrDefaultAsync();
+                if (collabarator != null)
+                {
+                    // Collabarator collabarator = new Collabarator();
+                    this.dbContext.Collab.Remove(collabarator);
+                    await this.dbContext.SaveChangesAsync();
+                    // await dbContext.collabarators.ToListAsync();
+                }
 
-       
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
     }
 }

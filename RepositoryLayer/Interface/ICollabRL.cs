@@ -10,6 +10,7 @@ namespace RepositoryLayer.Interface
     public interface ICollabRL
     {
         Task<List<Collab>> CreateCollab(CollabPostModel collabPost, int NotesId, int UserId);
-       
+        Task RemoveCollab(int CollabId, int Userid);
+
     }
 }
